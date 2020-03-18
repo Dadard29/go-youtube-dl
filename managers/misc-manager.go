@@ -3,13 +3,19 @@ package managers
 import (
 	"github.com/Dadard29/go-api-utils/log"
 	"github.com/Dadard29/go-api-utils/log/logLevel"
-	"github.com/Dadard29/go-subscription-connector/subChecker"
-	"github.com/Dadard29/go-youtube-dl/api"
+	"golang.org/x/text/transform"
+	"golang.org/x/text/unicode/norm"
+	"unicode"
 )
 
 var logger = log.NewLogger("MANAGER", logLevel.DEBUG)
 
-var scConfig, _ = api.Api.Config.GetSubcategoryFromFile("api", "subscription")
-var sc = subChecker.NewSubCheckerFromConfig(scConfig)
+func isMn(r rune) bool {
+	return unicode.Is(unicode.Mn, r) // Mn: nonspacing marks
+}
 
-const errorNotSubscribed = "invalid subscription token"
+func unidecode(s string) string {
+	t := transform.Chain(norm.NFD, transform.RemoveFunc(isMn), norm.NFC)
+	result, _, _ := transform.String(t, s)
+	return result
+}

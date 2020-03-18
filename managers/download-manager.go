@@ -1,1 +1,177 @@
 package managers
+
+import (
+	"errors"
+	"fmt"
+	"github.com/Dadard29/go-youtube-dl/models"
+	"github.com/Dadard29/go-youtube-dl/repositories"
+	"io/ioutil"
+	"path"
+)
+
+func GetDownloadFile(token string) (string, error) {
+	// check if operation occurring now
+	s, err := repositories.GetStatus(token)
+	if err == nil && !s.Done {
+		return "", errors.New("an operation is currently being processed")
+	}
+
+	p := path.Join(repositories.Store, token)
+	dir, err := ioutil.ReadDir(p)
+	if err != nil {
+		return "", err
+	}
+
+	if len(dir) == 0 {
+		return "", errors.New("your placeholder is emtpy")
+	}
+
+	if len(dir) > 1 {
+		return "", errors.New("your placeholder is a f*ckin mess")
+	}
+
+	return path.Join(repositories.Store, token, dir[0].Name()), nil
+
+
+}
+
+func GetDownloadStatus(token string) (models.StatusJson, error) {
+	var j models.StatusJson
+	s, err := repositories.GetStatus(token)
+
+	if err != nil {
+		return j, err
+	}
+
+	return models.NewStatusJson(s), nil
+}
+
+func CancelDownload(token string) {
+	repositories.EndStatus(token, "cancelled by user")
+}
+
+func Download(token string, videoId string) error {
+	// check if operation occurring now
+	s, err := repositories.GetStatus(token)
+	if err == nil && !s.Done {
+		return errors.New("an operation is currently being processed")
+	}
+
+	vModel, err := repositories.VideoGet(token, videoId)
+	if err != nil {
+		return err
+	}
+
+	if !repositories.CheckPlaceholder(token) {
+		err := errors.New("error checking placeholder")
+		return err
+	}
+	repositories.CleanPlaceholder(token)
+	repositories.NewStatus(token, "download started")
+
+	tempFile := path.Join(repositories.Store, token, "tmp.mp3")
+
+	go func() {
+		logger.Info("download started")
+		repositories.Download(vModel, tempFile)
+		err = repositories.SetID3v2Tags(tempFile, vModel)
+		if err != nil {
+			logger.Error(err.Error())
+			repositories.CleanPlaceholder(token)
+			repositories.EndStatus(token, "error setting ID3 tags")
+			return
+		}
+
+		filename := fmt.Sprintf("%s - %s.mp3", vModel.Artist, vModel.Title)
+		outputFile := path.Join(repositories.Store, token, filename)
+		err = repositories.RenameFile(tempFile, outputFile)
+		if err != nil {
+			logger.Error(err.Error())
+			repositories.CleanPlaceholder(token)
+			repositories.EndStatus(token, "error storing file")
+			return
+		}
+
+
+		repositories.EndStatus(token, "download done")
+		logger.Info("download done")
+	}()
+
+
+	return nil
+}
+
+func DownloadAll(token string) error {
+	// check if operation occurring now
+	s, err := repositories.GetStatus(token)
+	if err == nil && !s.Done {
+		return errors.New("an operation is currently being processed")
+	}
+
+	vList, err := repositories.VideoGetList(token)
+	if err != nil {
+		return err
+	}
+
+	if !repositories.CheckPlaceholder(token) {
+		err := errors.New("error checking placeholder")
+		return err
+	}
+	repositories.CleanPlaceholder(token)
+	repositories.NewStatus(token, "download started")
+
+	tempFile := path.Join(repositories.Store, token, "tmp.mp3")
+
+	go func() {
+		logger.Info("download started")
+
+		var status = 0
+		var unit = 100 / len(vList)
+		for _, m := range vList {
+			repositories.Download(m, tempFile)
+
+			err = repositories.SetID3v2Tags(tempFile, m)
+			if err != nil {
+				repositories.CleanPlaceholder(token)
+				repositories.EndStatus(token, "error setting ID3 tags")
+				continue
+			}
+
+			filename := fmt.Sprintf("%s - %s.mp3", m.Artist, m.Title)
+			outputFile := path.Join(repositories.Store, token,filename)
+			err = repositories.RenameFile(tempFile, outputFile)
+			if err != nil {
+				repositories.CleanPlaceholder(token)
+				repositories.EndStatus(token, "error storing file")
+				continue
+			}
+
+			status += unit
+			repositories.UpdateStatus(token, status,
+				fmt.Sprintf("progress is %d%%", status))
+
+			logger.Info(fmt.Sprintf("(%d%% done) downloaded and stored %s", status, filename))
+		}
+
+		err := repositories.ArchiveFiles(token)
+		if err != nil {
+			logger.Error(err.Error())
+			repositories.CleanPlaceholder(token)
+			repositories.EndStatus(token, "error archiving mp3 files")
+		}
+
+		err = repositories.CleanMp3Files(token)
+		if err != nil {
+			logger.Error(err.Error())
+			repositories.CleanPlaceholder(token)
+			repositories.EndStatus(token, "error cleaning up mp3 files")
+		}
+
+
+		repositories.EndStatus(token, "download done")
+		logger.Info("download done")
+	}()
+
+
+	return nil
+}
