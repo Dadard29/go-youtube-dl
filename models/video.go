@@ -5,8 +5,8 @@ import "time"
 type VideoModel struct {
 	Id int `gorm:"type:int;index:id;primary_key;auto_increment"`
 	VideoId string `gorm:"type:varchar(30);index:video_id"`
-	Token string `gorm:"type:varchar(30);index:token"`
-	Title string `gorm:"type:varchar(30);index:title"`
+	Token string `gorm:"type:varchar(70);index:token"`
+	Title string `gorm:"type:varchar(150);index:title"`
 	Album string `gorm:"type:varchar(30);index:album"`
 	Artist string `gorm:"type:varchar(30);index:artist"`
 	Date time.Time `gorm:"type:date;index:date"`

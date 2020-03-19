@@ -125,15 +125,14 @@ func DownloadAll(token string) error {
 	go func() {
 		logger.Info("download started")
 
-		var status = 0
-		var unit = 100 / len(vList)
+		var status = 0.00
+		var unit = 100.0 / float64(len(vList))
 		for _, m := range vList {
 			repositories.Download(m, tempFile)
 
 			err = repositories.SetID3v2Tags(tempFile, m)
 			if err != nil {
-				repositories.CleanPlaceholder(token)
-				repositories.EndStatus(token, "error setting ID3 tags")
+				logger.Error(fmt.Sprintf("error setting id3v2 tags: %v", err))
 				continue
 			}
 
@@ -141,16 +140,15 @@ func DownloadAll(token string) error {
 			outputFile := path.Join(repositories.Store, token,filename)
 			err = repositories.RenameFile(tempFile, outputFile)
 			if err != nil {
-				repositories.CleanPlaceholder(token)
-				repositories.EndStatus(token, "error storing file")
+				logger.Error(fmt.Sprintf("error renaming file: %v", err))
 				continue
 			}
 
 			status += unit
-			repositories.UpdateStatus(token, status,
-				fmt.Sprintf("progress is %d%%", status))
+			repositories.UpdateStatus(token, int(status),
+				fmt.Sprintf("progress is %d%%", int(status)))
 
-			logger.Info(fmt.Sprintf("(%d%% done) downloaded and stored %s", status, filename))
+			logger.Info(fmt.Sprintf("(%f%% done) downloaded and stored %s", status, filename))
 		}
 
 		err := repositories.ArchiveFiles(token)
