@@ -12,9 +12,9 @@ ENV PASSWORD_DB=$ARG_PASSWORD_DB
 ENV VERSION=$ARG_VERSION
 ENV HOST_SUB=$ARG_HOST_SUB
 
-ENV CORS_ORIGIN=http://dadard.fr
+ENV CORS_ORIGIN=https://dadard.fr
 
-RUN apk add --update git gcc libc-dev wget
+RUN apk add --update git gcc libc-dev wget python
 
 RUN wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
 RUN chmod a+rx /usr/local/bin/youtube-dl
