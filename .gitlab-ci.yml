@@ -11,7 +11,7 @@ build:
     - tags
   stage: build
   script:
-    - docker ingo
+    - docker info
     - echo "registering with $REGISTRY_USERNAME $REGISTRY_PASSWORD"
     - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USERNAME --password-stdin registry.gitlab.com
     - echo version set to $CI_COMMIT_TAG
@@ -20,6 +20,8 @@ build:
     - docker push $IMAGE_NAME
 
 deploy:
+  only:
+    - tags
   stage: deploy
   script:
     - apk add --update curl wget
