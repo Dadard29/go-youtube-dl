@@ -59,6 +59,10 @@ func VideoManagerCreate(token string, videoId string) (models.VideoJson, error) 
 		return v, err
 	}
 
+	if len(videoInfos.Items) < 1 {
+		return v, errors.New("this video ID is invalid")
+	}
+
 	videoYt := videoInfos.Items[0]
 	title := unidecode(videoYt.Snippet.Title)
 	channel := unidecode(videoYt.Snippet.ChannelTitle)
