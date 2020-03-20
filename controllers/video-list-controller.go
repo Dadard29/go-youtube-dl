@@ -73,7 +73,22 @@ func VideoListDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	l, err := managers.VideoListManagerDelete(accessToken)
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		logger.Error(err.Error())
+		api.Api.BuildErrorResponse(http.StatusBadRequest, "invalid body", w)
+		return
+	}
+
+	var j models.VideoDeleteAllJson
+	err = json.Unmarshal(body, &j)
+	if err != nil {
+		logger.Error(err.Error())
+		api.Api.BuildErrorResponse(http.StatusBadRequest, "invalid json body", w)
+		return
+	}
+
+	l, err := managers.VideoListManagerDelete(accessToken, j)
 	if err != nil {
 		logger.Error(err.Error())
 		api.Api.BuildErrorResponse(http.StatusInternalServerError,
@@ -88,7 +103,7 @@ func VideoListDelete(w http.ResponseWriter, r *http.Request) {
 // PUT
 // Authorization: 	JWT + token
 // Params: 			None
-// Body: 			models.VideoJson
+// Body: 			models.VideoUpdateAllJson
 func VideoListUpdate(w http.ResponseWriter, r *http.Request) {
 	jwt := auth.ParseApiKey(r, authorizationKey, true)
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
@@ -103,7 +118,7 @@ func VideoListUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var j models.VideoJson
+	var j models.VideoUpdateAllJson
 	err = json.Unmarshal(body, &j)
 	if err != nil {
 		logger.Error(err.Error())

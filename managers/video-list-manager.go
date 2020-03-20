@@ -97,16 +97,15 @@ func VideoListManagerCreateFromPlaylist(token string, playlistId string) ([]mode
 	return vJsonList, nil
 }
 
-func VideoListManagerDelete(token string) ([]models.VideoJson, error) {
-	var l = make([]models.VideoJson, 0)
-
-	listDb, err := repositories.VideoGetList(token)
-	if err != nil {
-		return l, err
-	}
-
+func VideoListManagerDelete(token string, json models.VideoDeleteAllJson) ([]models.VideoJson, error) {
 	var vList = make([]models.VideoJson, 0)
-	for _, v := range listDb {
+	for _, v := range json.VideoList {
+		v, err := repositories.VideoGet(token, v)
+		if err != nil {
+			logger.Error(err.Error())
+			continue
+		}
+
 		vDeleted, err := repositories.VideoDelete(v)
 		if err != nil {
 			logger.Error(err.Error())
@@ -118,30 +117,31 @@ func VideoListManagerDelete(token string) ([]models.VideoJson, error) {
 	return vList, nil
 }
 
-func VideoListManagerUpdate(token string, json models.VideoJson) ([]models.VideoJson, error) {
-	var l = make([]models.VideoJson, 0)
-
-	listDb, err := repositories.VideoGetList(token)
-	if err != nil {
-		return l, err
-	}
+func VideoListManagerUpdate(token string, json models.VideoUpdateAllJson) ([]models.VideoJson, error) {
+	infos := json.Infos
 
 	var vList = make([]models.VideoJson, 0)
-	for _, v := range listDb {
-		if json.Title != "" {
-			v.Title = json.Title
+	for _, videoId := range json.VideoList {
+		v, err := repositories.VideoGet(token, videoId)
+		if err != nil {
+			logger.Error(err.Error())
+			continue
 		}
 
-		if json.Album != "" {
-			v.Album = json.Album
+		if infos.Title != "" {
+			v.Title = infos.Title
 		}
 
-		if json.Artist != "" {
-			v.Artist = json.Artist
+		if infos.Album != "" {
+			v.Album = infos.Album
 		}
 
-		if json.Date != "" {
-			d, err := time.Parse("2006-01-02", json.Date)
+		if infos.Artist != "" {
+			v.Artist = infos.Artist
+		}
+
+		if infos.Date != "" {
+			d, err := time.Parse("2006-01-02", infos.Date)
 			if err != nil {
 				logger.Error(err.Error())
 				continue

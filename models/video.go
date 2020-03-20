@@ -28,6 +28,19 @@ type VideoJson struct {
 	Date string
 }
 
+type VideoUpdateAllJson struct {
+	// the infos to update
+	Infos VideoJson
+
+	// the list of IDs to update
+	VideoList []string
+}
+
+type VideoDeleteAllJson struct {
+	// the list of IDs to delete
+	VideoList []string
+}
+
 func NewVideoJson(v VideoModel) VideoJson {
 	return VideoJson{
 		VideoId: v.VideoId,
@@ -37,6 +50,7 @@ func NewVideoJson(v VideoModel) VideoJson {
 		Date:    v.Date.String(),
 	}
 }
+
 
 type VideoYoutubeModel struct {
 	Kind     string `json:"kind"`
