@@ -16,6 +16,11 @@ func GetDownloadFile(token string) (string, error) {
 		return "", errors.New("an operation is currently being processed")
 	}
 
+	if !repositories.CheckPlaceholder(token) {
+		err := errors.New("error checking placeholder")
+		return "", err
+	}
+
 	p := path.Join(repositories.Store, token)
 	dir, err := ioutil.ReadDir(p)
 	if err != nil {
