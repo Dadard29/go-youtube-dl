@@ -11,13 +11,13 @@ import (
 )
 
 // GET
-// Authorization: 	JWT + token
+// Authorization: 	token
 // Params: 			videoId
 // Body: 			None
 func VideoGet(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 
@@ -40,13 +40,13 @@ func VideoGet(w http.ResponseWriter, r *http.Request) {
 }
 
 // POST
-// Authorization: 	JWT + token
+// Authorization: 	token
 // Params: 			videoId
 // Body: 			None
 func VideoPost(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 
@@ -69,13 +69,13 @@ func VideoPost(w http.ResponseWriter, r *http.Request) {
 }
 
 // PUT
-// Authorization: 	JWT + token
+// Authorization: 	token
 // Params: 			None
 // Body: 			models.VideoJson
 func VideoPut(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 
@@ -106,13 +106,13 @@ func VideoPut(w http.ResponseWriter, r *http.Request) {
 }
 
 // DELETE
-// Authorization: 	JWT + token
+// Authorization: 	token
 // Params: 			videoId
 // Body: 			None
 func VideoDelete(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 

@@ -8,13 +8,13 @@ import (
 )
 
 // GET
-// Authorization: 	JWT + token
+// Authorization: 	token
 // Params: 			None
 // Body: 			None
 func DownloadGet(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 
@@ -28,13 +28,13 @@ func DownloadGet(w http.ResponseWriter, r *http.Request) {
 }
 
 // GET
-// Authorization: 	JWT + token
+// Authorization: 	token
 // Params: 			None
 // Body: 			None
 func DownloadDelete(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 
@@ -43,13 +43,13 @@ func DownloadDelete(w http.ResponseWriter, r *http.Request) {
 }
 
 // POST
-// Authorization: 	JWT + token
+// Authorization: 	token
 // Params: 			videoId
 // Body: 			None
 func DownloadPost(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 
@@ -71,13 +71,13 @@ func DownloadPost(w http.ResponseWriter, r *http.Request) {
 }
 
 // GET
-// Authorization: 	JWT + token
+// Authorization: 	token
 // Params: 			None
 // Body: 			None
 func FileGet(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 
@@ -93,9 +93,9 @@ func FileGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func DownloadAllPost(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 

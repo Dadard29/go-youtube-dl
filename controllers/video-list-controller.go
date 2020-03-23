@@ -11,13 +11,13 @@ import (
 )
 
 // GET
-// Authorization: 	JWT + token
+// Authorization: 	token
 // Params: 			None
 // Body: 			None
 func VideoListGet(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 
@@ -34,13 +34,13 @@ func VideoListGet(w http.ResponseWriter, r *http.Request) {
 
 
 // POST
-// Authorization: 	JWT + token
+// Authorization: 	token
 // Params: 			playlistId
 // Body: 			None
 func VideoListCreate(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 
@@ -63,13 +63,13 @@ func VideoListCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 // DELETE
-// Authorization: 	JWT + token
+// Authorization: 	token
 // Params: 			None
 // Body: 			None
 func VideoListDelete(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 
@@ -101,13 +101,13 @@ func VideoListDelete(w http.ResponseWriter, r *http.Request) {
 
 
 // PUT
-// Authorization: 	JWT + token
+// Authorization: 	token
 // Params: 			None
 // Body: 			models.VideoUpdateAllJson
 func VideoListUpdate(w http.ResponseWriter, r *http.Request) {
-	jwt := auth.ParseApiKey(r, authorizationKey, true)
+
 	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
-	if !checkToken(accessToken, jwt, w) {
+	if !checkToken(accessToken, w) {
 		return
 	}
 

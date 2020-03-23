@@ -17,12 +17,12 @@ const authorizationKey = "Authorization"
 const accessTokenKey = "X-Access-Token"
 const apiName = "youtube-download"
 
-func checkToken(token string, jwt string, w http.ResponseWriter) bool {
-	err := Sc.CheckToken(token, jwt, apiName)
+func checkToken(token string, w http.ResponseWriter) bool {
+	err := Sc.CheckToken(token, apiName)
 	if err != nil {
 		logger.Error(err.Error())
 		api.Api.BuildErrorResponse(http.StatusInternalServerError,
-			err.Error(), w)
+			"error checking subscription", w)
 		return false
 	}
 
