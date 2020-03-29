@@ -29,13 +29,14 @@ func CheckPlaceholder(token string) bool {
 	return true
 }
 
-func Download(vModel models.VideoModel, path string) {
+func Download(vModel models.VideoModel, outputPath string, filename string) {
 
 	vUrl := vModel.GetUrl()
 	youtubeDl := goydl.NewYoutubeDl()
-	youtubeDl.Options.Output.Value = path
+	youtubeDl.Options.Output.Value = path.Join(outputPath, filename + ".%(ext)s")
 	youtubeDl.Options.ExtractAudio.Value = true
 	youtubeDl.Options.AudioFormat.Value = "mp3"
+
 
 	cmd, err := youtubeDl.Download(vUrl)
 	if err != nil {

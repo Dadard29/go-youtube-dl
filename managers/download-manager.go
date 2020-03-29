@@ -74,12 +74,13 @@ func Download(token string, videoId string) error {
 	repositories.CleanPlaceholder(token)
 	repositories.NewStatus(token, "download started")
 
-	tempFile := path.Join(repositories.Store, token, "tmp.mp3")
+	tempFilename := "tmp"
+	tempFilePath := path.Join(repositories.Store, token, tempFilename + ".mp3")
 
 	go func() {
 		logger.Info("download started")
-		repositories.Download(vModel, tempFile)
-		err = repositories.SetID3v2Tags(tempFile, vModel)
+		repositories.Download(vModel, path.Join(repositories.Store, token), tempFilename)
+		err = repositories.SetID3v2Tags(tempFilePath, vModel)
 		if err != nil {
 			logger.Error(err.Error())
 			repositories.CleanPlaceholder(token)
@@ -89,7 +90,7 @@ func Download(token string, videoId string) error {
 
 		filename := fmt.Sprintf("%s - %s.mp3", vModel.Artist, vModel.Title)
 		outputFile := path.Join(repositories.Store, token, filename)
-		err = repositories.RenameFile(tempFile, outputFile)
+		err = repositories.RenameFile(tempFilePath, outputFile)
 		if err != nil {
 			logger.Error(err.Error())
 			repositories.CleanPlaceholder(token)
@@ -125,7 +126,8 @@ func DownloadAll(token string) error {
 	repositories.CleanPlaceholder(token)
 	repositories.NewStatus(token, "download started")
 
-	tempFile := path.Join(repositories.Store, token, "tmp.mp3")
+	tempFilename := "tmp"
+	tempFilePath := path.Join(repositories.Store, token, tempFilename + ".mp3")
 
 	go func() {
 		logger.Info("download started")
@@ -133,9 +135,9 @@ func DownloadAll(token string) error {
 		var status = 0.00
 		var unit = 100.0 / float64(len(vList))
 		for _, m := range vList {
-			repositories.Download(m, tempFile)
+			repositories.Download(m, path.Join(repositories.Store, token), tempFilename)
 
-			err = repositories.SetID3v2Tags(tempFile, m)
+			err = repositories.SetID3v2Tags(tempFilePath, m)
 			if err != nil {
 				logger.Error(fmt.Sprintf("error setting id3v2 tags: %v", err))
 				continue
@@ -143,7 +145,7 @@ func DownloadAll(token string) error {
 
 			filename := fmt.Sprintf("%s - %s.mp3", m.Artist, m.Title)
 			outputFile := path.Join(repositories.Store, token,filename)
-			err = repositories.RenameFile(tempFile, outputFile)
+			err = repositories.RenameFile(tempFilePath, outputFile)
 			if err != nil {
 				logger.Error(fmt.Sprintf("error renaming file: %v", err))
 				continue
