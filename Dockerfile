@@ -14,7 +14,7 @@ ENV HOST_SUB=$ARG_HOST_SUB
 
 ENV CORS_ORIGIN=https://dadard.fr
 
-RUN apk add --update git gcc libc-dev wget python
+RUN apk add --update git gcc libc-dev wget python ffmpeg
 
 RUN wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
 RUN chmod a+rx /usr/local/bin/youtube-dl
