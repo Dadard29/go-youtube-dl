@@ -71,12 +71,12 @@ func DownloadPost(w http.ResponseWriter, r *http.Request) {
 }
 
 // GET
-// Authorization: 	token
-// Params: 			None
+// Authorization: 	None
+// Params: 			token
 // Body: 			None
 func FileGet(w http.ResponseWriter, r *http.Request) {
 
-	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
+	accessToken := auth.ParseApiKey(r, "token", false)
 	if !checkToken(accessToken, w) {
 		return
 	}
