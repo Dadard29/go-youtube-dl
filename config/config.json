@@ -11,7 +11,7 @@
       "host": "0.0.0.0",
       "port": "8082",
       "readTimeout": "15",
-      "writeTimeout": "15",
+      "writeTimeout": "120",
       "idleTimeout": "60"
     },
     "db": {
