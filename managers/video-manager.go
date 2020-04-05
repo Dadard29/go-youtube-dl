@@ -16,7 +16,7 @@ func getVideoDetails(videoId string) (models.VideoYoutubeModel, error) {
 	var v models.VideoYoutubeModel
 	infosUrl := "https://www.googleapis.com/youtube/v3/videos?part=%s&id=%s&key=%s"
 
-	part := "snippet,contentDetails,statistics"
+	part := "snippet"
 	key := os.Getenv("YT_API_KEY")
 
 	resp, err := http.Get(fmt.Sprintf(infosUrl, part, videoId, key))
