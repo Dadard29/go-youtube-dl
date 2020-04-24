@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -62,7 +63,7 @@ func SetID3v2Tags(path string, model models.VideoModel) error {
 	tag.SetTitle(model.Title)
 	tag.SetArtist(model.Artist)
 	tag.SetAlbum(model.Album)
-	tag.SetYear(string(model.Date.Year()))
+	tag.SetYear(strconv.Itoa(model.Date.Year()))
 
 	// Write it to file.
 	if err = tag.Save(); err != nil {
