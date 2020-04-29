@@ -69,12 +69,15 @@ func VideoManagerCreate(token string, videoId string) (models.VideoJson, error) 
 	publishedAt := videoYt.Snippet.PublishedAt
 
 	video := models.VideoModel{
-		VideoId: videoId,
-		Token:   token,
-		Title:   title,
-		Album:   channel,
-		Artist:  channel,
-		Date:    publishedAt,
+		Id:       0,
+		VideoId:  videoId,
+		Token:    token,
+		Title:    title,
+		Album:    channel,
+		Artist:   channel,
+		Date:     publishedAt,
+		Genre:    "",
+		ImageUrl: "",
 	}
 
 	videoDb, err := repositories.VideoCreate(video)
@@ -100,6 +103,8 @@ func VideoManagerUpdate(token string, videoJson models.VideoJson) (models.VideoJ
 		Album:   videoJson.Album,
 		Artist:  videoJson.Artist,
 		Date:    t,
+		Genre: videoJson.Genre,
+		ImageUrl: videoJson.ImageUrl,
 	})
 	if err != nil {
 		return v, err

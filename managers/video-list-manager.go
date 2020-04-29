@@ -83,6 +83,7 @@ func VideoListManagerCreateFromPlaylist(token string, playlistId string) ([]mode
 			Album:   channel,
 			Artist:  channel,
 			Date:    publishedAt,
+			Genre:   "",
 		}
 
 		videoDb, err := repositories.VideoCreate(vModel)
@@ -147,6 +148,10 @@ func VideoListManagerUpdate(token string, json models.VideoUpdateAllJson) ([]mod
 				continue
 			}
 			v.Date = d
+		}
+
+		if infos.Genre != "" {
+			v.Genre = infos.Genre
 		}
 
 		vUpdated, err := repositories.VideoUpdate(v)

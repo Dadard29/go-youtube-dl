@@ -74,6 +74,8 @@ func VideoUpdate(video models.VideoModel) (models.VideoModel, error) {
 	videoDb.Artist = video.Artist
 	videoDb.Album = video.Album
 	videoDb.Date = video.Date
+	videoDb.Genre = video.Genre
+	videoDb.ImageUrl = video.ImageUrl
 
 	api.Api.Database.Orm.Save(&videoDb)
 

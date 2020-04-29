@@ -10,6 +10,8 @@ type VideoModel struct {
 	Album string `gorm:"type:varchar(30);index:album"`
 	Artist string `gorm:"type:varchar(30);index:artist"`
 	Date time.Time `gorm:"type:date;index:date"`
+	Genre string `gorm:"type:varchar(40);index:genre"`
+	ImageUrl string `gorm:"type:varchar(200);index:image_url"`
 }
 
 func (VideoModel) TableName() string {
@@ -26,6 +28,8 @@ type VideoJson struct {
 	Album string
 	Artist string
 	Date string
+	Genre string
+	ImageUrl string
 }
 
 type VideoUpdateAllJson struct {
@@ -48,6 +52,8 @@ func NewVideoJson(v VideoModel) VideoJson {
 		Album:   v.Album,
 		Artist:  v.Artist,
 		Date:    v.Date.String(),
+		Genre: v.Genre,
+		ImageUrl: v.ImageUrl,
 	}
 }
 
@@ -104,21 +110,6 @@ type VideoYoutubeModel struct {
 				Description string `json:"description"`
 			} `json:"localized"`
 		} `json:"snippet"`
-		ContentDetails struct {
-			Duration        string `json:"duration"`
-			Dimension       string `json:"dimension"`
-			Definition      string `json:"definition"`
-			Caption         string `json:"caption"`
-			LicensedContent bool   `json:"licensedContent"`
-			Projection      string `json:"projection"`
-		} `json:"contentDetails"`
-		Statistics struct {
-			ViewCount     string `json:"viewCount"`
-			LikeCount     string `json:"likeCount"`
-			DislikeCount  string `json:"dislikeCount"`
-			FavoriteCount string `json:"favoriteCount"`
-			CommentCount  string `json:"commentCount"`
-		} `json:"statistics"`
 	} `json:"items"`
 }
 
