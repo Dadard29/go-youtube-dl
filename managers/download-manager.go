@@ -88,7 +88,7 @@ func Download(token string, videoId string) error {
 			return
 		}
 
-		filename := fmt.Sprintf("%s - %s.mp3", vModel.Artist, vModel.Title)
+		filename := fmt.Sprintf("%s.mp3", vModel.Title)
 		outputFile := path.Join(repositories.Store, token, filename)
 		err = repositories.RenameFile(tempFilePath, outputFile)
 		if err != nil {
