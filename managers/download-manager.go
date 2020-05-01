@@ -143,7 +143,7 @@ func DownloadAll(token string) error {
 				continue
 			}
 
-			filename := fmt.Sprintf("%s - %s.mp3", m.Artist, m.Title)
+			filename := fmt.Sprintf("%s.mp3", m.Title)
 			outputFile := path.Join(repositories.Store, token,filename)
 			err = repositories.RenameFile(tempFilePath, outputFile)
 			if err != nil {
