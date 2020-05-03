@@ -64,6 +64,7 @@ func SetID3v2Tags(path string, model models.VideoModel) error {
 	tag.SetArtist(model.Artist)
 	tag.SetAlbum(model.Album)
 	tag.SetYear(strconv.Itoa(model.Date.Year()))
+	tag.SetGenre(model.Genre)
 
 	// Write it to file.
 	if err = tag.Save(); err != nil {
