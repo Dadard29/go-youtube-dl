@@ -21,6 +21,12 @@ var routes = service.RouteMapping{
 			http.MethodDelete: controllers.VideoDelete,
 		},
 	},
+	"/video/search": service.Route{
+		Description:   "manage search",
+		MethodMapping: service.MethodMapping{
+			http.MethodPost: controllers.VideoSearchPost,
+		},
+	},
 	"/video/list": service.Route{
 		Description:   "manage the list of videos",
 		MethodMapping: service.MethodMapping{

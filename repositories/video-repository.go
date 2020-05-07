@@ -1,10 +1,14 @@
 package repositories
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/BrianAllred/goydl"
 	"github.com/Dadard29/go-youtube-dl/api"
 	"github.com/Dadard29/go-youtube-dl/models"
+	"time"
 )
 
 func videoExists(videoId string, token string) bool {
@@ -56,6 +60,55 @@ func VideoCreate(video models.VideoModel) (models.VideoModel, error) {
 	}
 
 	return video, nil
+}
+
+func VideoSearch(token string, title string, artist string, album string,
+	genre string, publishedAt string) (models.VideoModel, error) {
+	var f models.VideoModel
+
+	youtubeDl := goydl.NewYoutubeDl()
+	youtubeDl.Options.SkipDownload.Value = true
+	youtubeDl.Options.PrintJSON.Value = true
+
+	query := fmt.Sprintf("%s %s", artist, title)
+	search := "ytsearch:" + query
+
+	cmd, err := youtubeDl.Download(search)
+	if err != nil {
+		panic(err)
+	}
+
+	buf := new(bytes.Buffer)
+	_, err = buf.ReadFrom(youtubeDl.Stdout)
+	if err != nil {
+		return f, err
+	}
+
+	cmd.Wait()
+
+	data := buf.Bytes()
+	var res models.VideoSearchModel
+	err = json.Unmarshal(data, &res)
+	if err != nil {
+		return f, err
+	}
+
+	// parse time
+	t, err := time.Parse("2006-01-02", publishedAt)
+	if err != nil {
+		return f, err
+	}
+
+	return models.VideoModel{
+		VideoId:  res.ID,
+		Token:    token,
+		Title:    title,
+		Album:    album,
+		Artist:   artist,
+		Date:     t,
+		Genre:    genre,
+		ImageUrl: res.Thumbnail,
+	}, nil
 }
 
 func VideoUpdate(video models.VideoModel) (models.VideoModel, error) {

@@ -17,11 +17,19 @@ const authorizationKey = "Authorization"
 const accessTokenKey = "X-Access-Token"
 const apiName = "youtube-download"
 
+const (
+	titleParam = "title"
+	artistParam = "artist"
+	albumParam = "album"
+	genreParam = "genre"
+	dateParam = "date"
+)
+
 func checkToken(token string, w http.ResponseWriter) bool {
 	msg, err := Sc.CheckToken(token, apiName)
 	if err != nil {
 		logger.Error(err.Error())
-		api.Api.BuildErrorResponse(http.StatusInternalServerError, msg, w)
+		api.Api.BuildErrorResponse(http.StatusUnauthorized, msg, w)
 		return false
 	}
 

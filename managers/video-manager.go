@@ -88,6 +88,24 @@ func VideoManagerCreate(token string, videoId string) (models.VideoJson, error) 
 	return models.NewVideoJson(videoDb), nil
 }
 
+func VideoManagerSearch(token string, title string, artist string,
+	album string, genre string, publishedAt string) (models.VideoJson, error) {
+	var f models.VideoJson
+
+	v, err := repositories.VideoSearch(token, title, artist, album, genre, publishedAt)
+	if err != nil {
+		return f, err
+	}
+
+	videoDb, err := repositories.VideoCreate(v)
+	if err != nil {
+		return f, err
+	}
+
+	return models.NewVideoJson(videoDb), nil
+
+}
+
 func VideoManagerUpdate(token string, videoJson models.VideoJson) (models.VideoJson, error) {
 	var v models.VideoJson
 

@@ -68,6 +68,40 @@ func VideoPost(w http.ResponseWriter, r *http.Request) {
 	api.Api.BuildJsonResponse(true, "video created", v, w)
 }
 
+
+// GET
+// Authorization: 	token
+// Params: 			queryParam
+// Body: 			None
+
+// add a video from keywords
+func VideoSearchPost(w http.ResponseWriter, r *http.Request) {
+	accessToken := auth.ParseApiKey(r, accessTokenKey, true)
+	if !checkToken(accessToken, w) {
+		return
+	}
+
+	title := r.URL.Query().Get(titleParam)
+	artist := r.URL.Query().Get(artistParam)
+	album := r.URL.Query().Get(albumParam)
+	genre := r.URL.Query().Get(genreParam)
+	publishedAt := r.URL.Query().Get(dateParam)
+	if title == "" || artist == "" || album == "" || genre == "" || publishedAt == ""{
+		api.Api.BuildMissingParameter(w)
+		return
+	}
+
+	v, err := managers.VideoManagerSearch(accessToken, title, artist, album, genre, publishedAt)
+	if err != nil {
+		logger.Error(err.Error())
+		api.Api.BuildErrorResponse(http.StatusInternalServerError, "error creating video", w)
+		return
+	}
+
+	api.Api.BuildJsonResponse(true, "video created", v, w)
+
+}
+
 // PUT
 // Authorization: 	token
 // Params: 			None

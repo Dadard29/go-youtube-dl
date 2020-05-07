@@ -7,7 +7,7 @@ type VideoModel struct {
 	VideoId string `gorm:"type:varchar(30);index:video_id"`
 	Token string `gorm:"type:varchar(70);index:token"`
 	Title string `gorm:"type:varchar(150);index:title"`
-	Album string `gorm:"type:varchar(30);index:album"`
+	Album string `gorm:"type:varchar(70);index:album"`
 	Artist string `gorm:"type:varchar(30);index:artist"`
 	Date time.Time `gorm:"type:date;index:date"`
 	Genre string `gorm:"type:varchar(40);index:genre"`
