@@ -70,12 +70,12 @@ func VideoSearch(token string, title string, artist string, album string,
 	youtubeDl.Options.SkipDownload.Value = true
 	youtubeDl.Options.PrintJSON.Value = true
 
-	query := fmt.Sprintf("%s %s", artist, title)
+	query := fmt.Sprintf("'%s %s'", artist, title)
 	search := "ytsearch:" + query
 
 	cmd, err := youtubeDl.Download(search)
 	if err != nil {
-		panic(err)
+		return f, err
 	}
 
 	buf := new(bytes.Buffer)
