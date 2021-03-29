@@ -16,7 +16,6 @@ build:
     - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USERNAME --password-stdin registry.gitlab.com
     - echo version set to $CI_COMMIT_TAG
     - docker build -t $IMAGE_NAME --build-arg ARG_YT_API_KEY=$ARG_YT_API_KEY --build-arg ARG_USERNAME_DB=$ARG_USERNAME_DB --build-arg ARG_PASSWORD_DB=$ARG_PASSWORD_DB --build-arg ARG_VERSION=$CI_COMMIT_TAG --build-arg ARG_HOST_SUB=$ARG_HOST_SUB .
-    - docker run --rm $IMAGE_NAME go test -v ./...
     - docker push $IMAGE_NAME
 
 deploy:
