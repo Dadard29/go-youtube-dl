@@ -36,7 +36,7 @@ type VideoSearchModel struct {
 		Ext               string      `json:"ext"`
 		FormatNote        string      `json:"format_note"`
 		Acodec            string      `json:"acodec"`
-		Abr               int         `json:"abr,omitempty"`
+		Abr               float32         `json:"abr,omitempty"`
 		Asr               int         `json:"asr"`
 		Filesize          int         `json:"filesize"`
 		Fps               interface{} `json:"fps"`
@@ -94,7 +94,7 @@ type VideoSearchModel struct {
 	Vbr            interface{} `json:"vbr"`
 	StretchedRatio interface{} `json:"stretched_ratio"`
 	Acodec         string      `json:"acodec"`
-	Abr            int         `json:"abr"`
+	Abr            float32         `json:"abr"`
 	Ext            string      `json:"ext"`
 	Fulltitle      string      `json:"fulltitle"`
 	Filename       string      `json:"_filename"`
