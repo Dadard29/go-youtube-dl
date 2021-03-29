@@ -20,7 +20,7 @@ type VideoSearchModel struct {
 	} `json:"subtitles"`
 	AutomaticCaptions struct {
 	} `json:"automatic_captions"`
-	Duration      int         `json:"duration"`
+	Duration      float32         `json:"duration"`
 	AgeLimit      int         `json:"age_limit"`
 	Annotations   interface{} `json:"annotations"`
 	Chapters      interface{} `json:"chapters"`
