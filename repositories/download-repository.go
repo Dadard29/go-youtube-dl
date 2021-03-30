@@ -3,9 +3,9 @@ package repositories
 import (
 	"archive/zip"
 	"fmt"
-	"github.com/BrianAllred/goydl"
 	"github.com/Dadard29/go-youtube-dl/api"
 	"github.com/Dadard29/go-youtube-dl/models"
+	"github.com/Dadard29/goydl"
 	"github.com/bogem/id3v2"
 	"io/ioutil"
 	"os"

@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/BrianAllred/goydl"
 	"github.com/Dadard29/go-youtube-dl/api"
 	"github.com/Dadard29/go-youtube-dl/models"
+	"github.com/Dadard29/goydl"
 	"time"
 )
 
